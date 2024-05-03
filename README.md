@@ -20,8 +20,5 @@ To utilize this framework and generate flood imagery:
 ## Contributions
 Contributions to this project, including bug fixes, enhancements, and additional features, are welcome. Please refer to the contribution guidelines for more information.
 
-## License
-This project is licensed under the [MIT License](LICENSE). Feel free to use and modify it for your purposes.
-
 ## Acknowledgments
 This project builds upon the groundwork laid by the original Climategan project and extends it with novel enhancements. We acknowledge the contributions of all researchers and developers involved in advancing the field of flood prediction and advocacy.
