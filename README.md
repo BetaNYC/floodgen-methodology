@@ -12,10 +12,28 @@ Building upon the ClimateGAN framework, this project replaces the masker model w
 - Proof of concept demonstrating the potential applications of the enhanced framework.
 
 ## How to Use
-To utilize this framework and generate flood imagery:
-1. Clone or fork this repository.
-2. Install necessary dependencies.
-3. Follow the provided documentation for running the code and generating flood images.
+
+To utilize this framework and generate flood imagery, follow these steps:
+
+1. **Fork the Repository:** Begin by forking this repository to your own GitHub account.
+
+2. **Install Requirements:** Install the necessary dependencies by running the following command:
+   ```
+   pip install -r requirements.txt
+   ```
+
+3. **Fetch Images and Masks:** Run the script `fetch_images_and_masks.py` to retrieve masks and street view images. Provide a CSV file similar in format to `site_selection.csv` (if no command-line arguments are provided, it will default to `site_selection.csv`).
+   ```
+   python3 fetch_images_and_masks.py <path_to_csv>
+   ```
+
+4. **Generate New Images:** After fetching the masks and street view images, run the script `process_views.sh` to generate new images based on the scraped masks and street views. Note that this step is GPU intensive, and we recommend using high-powered GPUs for efficient processing. If necessary, consider using a service like Paperspace for GPU-based computation.
+
+   ```
+   ./process_views.sh
+   ```
+
+**Note:** For detailed instructions and additional information, please refer to the documentation provided in the repository.
 
 ## Contributions
 Contributions to this project, including bug fixes, enhancements, and additional features, are welcome. Please refer to the contribution guidelines for more information.
