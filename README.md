@@ -33,6 +33,12 @@ To utilize this framework and generate flood imagery, follow these steps:
    ./process_views.sh
    ```
 
+## Final Output Images
+
+For a showcase of the final output images generated using the methodology outlined in this repository, please visit the [FloodGen Images Repository](https://github.com/BetaNYC/floodgen-images). Here, you can explore the photorealistic flood scenarios created for various neighborhoods in New York City, showcasing the potential consequences of flooding in urban landscapes.
+
+These images serve as visual representations of the innovative approach taken in this project to raise awareness about flood risks and advocate for resilient infrastructure and planning.
+
 ## Contributions
 Contributions to this project, including bug fixes, enhancements, and additional features, are welcome. Please refer to the contribution guidelines for more information.
 
