@@ -18,6 +18,12 @@ def parse_args():
         help="Path to a directory with image files",
     )
     parser.add_argument(
+        "-im",
+        "--images_mask_paths",
+        type=str,
+        help="Path to a directory with image mask files",
+    )
+    parser.add_argument(
         "-o",
         "--output_path",
         type=str,
@@ -151,7 +157,7 @@ def parse_args():
 args = parse_args()
 
 
-print("\n• Imports\n")
+print("\nâ€¢ Imports\n")
 import time
 
 import_time = time.time()
@@ -164,7 +170,8 @@ import comet_ml  # noqa: F401
 import torch
 import numpy as np
 import skimage.io as io
-from skimage.color import rgba2rgb
+from skimage import img_as_float32
+from skimage.color import rgba2rgb, rgb2gray
 from skimage.transform import resize
 from tqdm import tqdm
 
@@ -380,7 +387,7 @@ if __name__ == "__main__":
     # -----  Initialize script variables  -----
     # -----------------------------------------
     print(
-        "• Using args\n\n"
+        "â€¢ Using args\n\n"
         + "\n".join(["{:25}: {}".format(k, v) for k, v in vars(args).items()]),
     )
 
@@ -391,6 +398,7 @@ if __name__ == "__main__":
     half = args.half
     save_masks = args.save_masks
     images_paths = resolve(args.images_paths)
+    images_mask_paths = resolve(args.images_mask_paths) if args.images_mask_paths is not None else None
     keep_ratio = args.keep_ratio_128
     max_im_width = args.max_im_width
     n_images = args.n_images
@@ -452,7 +460,7 @@ if __name__ == "__main__":
     # -----  Load Trainer instance  -----
     # -----------------------------------
     with Timer(store=stores.get("setup", []), ignore=time_inference):
-        print("\n• Initializing trainer\n")
+        print("\nâ€¢ Initializing trainer\n")
         torch.set_grad_enabled(False)
         trainer = Trainer.resume_from_path(
             resume_path,
@@ -470,47 +478,64 @@ if __name__ == "__main__":
     # --------------------------------------------
     # -----  Read data from input directory  -----
     # --------------------------------------------
-    print("\n• Reading & Pre-processing Data\n")
+    print("\nâ€¢ Reading & Pre-processing Data\n")
 
     # find all images
     data_paths = find_images(images_paths)
+    data_mask_paths = find_images(images_mask_paths) if images_mask_paths else []
     base_data_paths = data_paths
+    base_data_mask_paths = data_mask_paths
     # filter images
     if 0 < n_images < len(data_paths):
         data_paths = data_paths[:n_images]
+        data_mask_paths = data_mask_paths[:n_images] 
     # repeat data
     elif n_images > len(data_paths):
         repeats = n_images // len(data_paths) + 1
         data_paths = base_data_paths * repeats
         data_paths = data_paths[:n_images]
 
+        data_mask_paths = base_data_mask_paths * repeats
+        data_mask_paths = data_mask_paths[:n_images]
+
     with Timer(store=stores.get("data pre-processing", []), ignore=time_inference):
         # read images to numpy arrays
         data = [io.imread(str(d)) for d in data_paths]
+        data_mask = [io.imread(str(d),as_gray=True) for d in data_mask_paths] 
         # rgba to rgb
         data = [im if im.shape[-1] == 3 else uint8(rgba2rgb(im) * 255) for im in data]
+        # data_mask = [im if im.shape[-1] == 1 else im[:,:,:3] < 128 for im in data_mask]
+        
         # resize images to target_size or
         if keep_ratio:
             # to closest multiples of 128 <= max_im_width, keeping aspect ratio
             new_sizes = [to_128(d, max_im_width) for d in data]
             data = [resize(d, ns, anti_aliasing=True) for d, ns in zip(data, new_sizes)]
+
+            new_mask_sizes = [to_128(d, max_im_width) for d in data_mask]
+            data_mask = [resize(d, ns, anti_aliasing=True) for d, ns in zip(data_mask, new_mask_sizes)]
         else:
             # to args.target_size
             data = [resize_and_crop(d, target_size) for d in data]
             new_sizes = [(target_size, target_size) for _ in data]
+
+            data_mask = [resize_and_crop(d, target_size) for d in data_mask]
+            new_mask_sizes = [(target_size, target_size) for _ in data_mask]
         # resize() produces [0, 1] images, rescale to [-1, 1]
         data = [to_m1_p1(d, i) for i, d in enumerate(data)]
+        data_mask = [to_m1_p1(d, i) for i, d in enumerate(data_mask)] 
 
     n_batchs = len(data) // batch_size
     if len(data) % batch_size != 0:
         n_batchs += 1
 
     print("Found", len(base_data_paths), "images. Inferring on", len(data), "images.")
+    print("Found", len(base_data_mask_paths), "image masks. Inferring on", len(data_mask), "images.")
 
     # --------------------------------------------
     # -----  Batch-process images to events  -----
     # --------------------------------------------
-    print(f"\n• Using device {str(trainer.device)}\n")
+    print(f"\nâ€¢ Using device {str(trainer.device)}\n")
 
     all_events = []
 
@@ -518,11 +543,13 @@ if __name__ == "__main__":
         for b in tqdm(range(n_batchs), desc="Infering events", unit="batch"):
 
             images = data[b * batch_size : (b + 1) * batch_size]
+            images_mask = data_mask[b * batch_size : (b + 1) * batch_size] 
             if not images:
                 continue
 
             # concatenate images in a batch batch_size x height x width x 3
             images = np.stack(images)
+            images_mask = np.stack(images_mask) if images_mask_paths is not None else None
             # Retreive numpy events as a dict {event: array[BxHxWxC]}
             events = trainer.infer_all(
                 images,
@@ -532,6 +559,7 @@ if __name__ == "__main__":
                 half=half,
                 cloudy=cloudy,
                 return_masks=save_masks,
+                x_mask=images_mask,
             )
 
             # save resized and cropped image
@@ -547,7 +575,7 @@ if __name__ == "__main__":
     if outdir is not None or upload:
 
         if upload:
-            print("\n• Creating comet Experiment")
+            print("\nâ€¢ Creating comet Experiment")
             exp = comet_ml.Experiment(project_name="climategan-apply")
             exp.log_parameters(vars(args))
 
@@ -564,7 +592,7 @@ if __name__ == "__main__":
 
         progress_bar_desc = ""
         if outdir is not None:
-            print("\n• Output directory:\n")
+            print("\nâ€¢ Output directory:\n")
             print(str(outdir), "\n")
             if upload:
                 progress_bar_desc = "Writing & Uploading events"
@@ -622,7 +650,7 @@ if __name__ == "__main__":
                     if upload:
                         exp.log_image(im_data, name=im_path.name)
     if zip_outdir:
-        print("\n• Zipping output directory... ", end="", flush=True)
+        print("\nâ€¢ Zipping output directory... ", end="", flush=True)
         archive_path = Path(shutil.make_archive(outdir.name, "zip", root_dir=outdir))
         archive_path = archive_path.rename(outdir.parent / archive_path.name)
         print("Done:\n")
@@ -632,7 +660,7 @@ if __name__ == "__main__":
     # -----  Print timings  -----
     # ---------------------------
     if time_inference:
-        print("\n• Timings\n")
+        print("\nâ€¢ Timings\n")
         print_store(stores)
 
     # ---------------------------------------------

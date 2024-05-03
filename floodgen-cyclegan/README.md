@@ -35,9 +35,8 @@ In this section we'll explain how to produce the `Painted Input` along with the 
 This repository and associated model have been developed using Python 3.8.2 and **Pytorch 1.7.0**.
 
 ```bash
-$ git clone git@github.com:cc-ai/climategan.git
-$ cd climategan
-$ pip install -r requirements-3.8.2.txt # or `requirements-any.txt` for other Python versions (not tested but expected to be fine)
+$ cd floodgen-cyclegan
+$ pip install -r requirements-any.txt
 ```
 
 Our pipeline uses [comet.ml](https://comet.ml) to log images. You don't *have* to use their services but we recommend you do as images can be uploaded on your workspace instead of being written to disk.

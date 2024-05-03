@@ -227,6 +227,7 @@ class Trainer:
         auto_resize_640=False,
         ignore_event=set(),
         return_masks=False,
+        x_mask=None,
     ):
         """
         Create a dictionnary of events from a numpy or tensor,
@@ -238,14 +239,15 @@ class Trainer:
         """
         assert self.is_setup
         assert len(x.shape) in {3, 4}, f"Unknown Data shape {x.shape}"
-
+        
+        
         # convert numpy to tensor
         if not isinstance(x, torch.Tensor):
             x = torch.tensor(x, device=self.device)
 
         # add batch dimension
         if len(x.shape) == 3:
-            x.unsqueeze_(0)
+            x.unsqueeze_(0)            
 
         # permute channels as second dimension
         if x.shape[1] != 3:
@@ -262,10 +264,31 @@ class Trainer:
 
         if half:
             x = x.half()
+            
+        if x_mask is not None:
+            # convert numpy to tensor
+            if not isinstance(x_mask, torch.Tensor):
+                x_mask = torch.tensor(x_mask, device=self.device)
+
+            x_mask.unsqueeze_(0)
+            
+            # send to device
+            if x_mask.device != self.device:
+                x_mask = x_mask.to(self.device)
+
+            # interpolate to standard input size
+            if auto_resize_640 and (x_mask.shape[-1] != 640 or x_mask.shape[-2] != 640):
+                x_mask = torch.nn.functional.interpolate(x_mask, (640, 640), mode="bilinear")
+
+            if half:
+                x_mask = x_mask.half()
+
+            x_mask [x_mask > 0] = 0
+            x_mask [x_mask < 0] = 1
 
         # adjust painter's latent vector
         self.G.painter.set_latent_shape(x.shape, True)
-
+    
         with Timer(store=stores.get("all events", [])):
             # encode
             with Timer(store=stores.get("encode", [])):
@@ -284,7 +307,8 @@ class Trainer:
                     xm.mark_step()
             with Timer(store=stores.get("mask", [])):
                 cond = self.G.make_m_cond(depth, segmentation, x)
-                mask = self.G.mask(z=z, cond=cond, z_depth=z_depth)
+                
+                mask = self.G.mask(z=z, cond=cond, z_depth=z_depth) if x_mask is None else x_mask
                 if xla:
                     xm.mark_step()
 
@@ -327,9 +351,10 @@ class Trainer:
 
         output_data = {"flood": flood, "wildfire": wildfire, "smog": smog}
         if return_masks:
-            output_data["mask"] = (
-                ((mask > bin_value) * 255).cpu().numpy().astype(np.uint8)
-            )
+            # output_data["mask"] = (
+            #     ((mask > bin_value) * 255).cpu().numpy().astype(np.uint8)
+            # )
+            output_data["mask"] = ((mask > bin_value) * 255).cpu().permute(0, 2, 3, 1).numpy().astype(np.uint8)
 
         return output_data
 
