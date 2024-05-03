@@ -1,0 +1,31 @@
+ID,Borough,Case Study,Place,Lat,Lon,Yaw,Minor,Moderate,Major
+1,Manhattan,East Harlem,2nd Avenue & East 125th Street,40.80276,-73.93358,36.29848623,-27.52,-26.82,-25.5
+2,Manhattan,East Harlem,East 110th Street & Lexington Avenue,40.79488,-73.94461,112.1010315,-27.02,-26.82,-26.62
+3,Manhattan,East Harlem,East River Plaza,40.79475,-73.93209,112.9866116,-27.91,-27.66,-27.46
+4,Manhattan,Lower East Side,East Houston Street & Avenue D,40.72001,-73.97925,106.8206568,-28.17,-27.92,-27.72
+5,Manhattan,Lower East Side,Madison Street & Jefferson St,40.71281,-73.98806,85.09601526,-25.8,-25.45,-25.3
+6,Manhattan,Lower East Side,Catherine Street & Madison Street,40.7117,-73.99688,166.8799326,-26.82,-26.42,-25.97
+7,Brooklyn,Coney Island,West 8th Street & Surf Avenue,40.57535,-73.97652,184.3856904,-29.96,-29.81,-29.01
+8,Brooklyn,Coney Island,Neptune Avenue & Highland Avenue,40.57646,-74.00703,263.7016285,-29.46,-29.11,-28.66
+9,Brooklyn,Coney Island,Brighton Beach Avenue & Coney Island Avenue,40.57795,-73.95958,175.7220812,-29.4,-29.05,-28.75
+10,Brooklyn,Flatbush,Linden Boulevard & Flatbush Avenue,40.65219,-73.95824,86.86890985,-15.99,-15.69,-14.79
+11,Brooklyn,Flatbush,Church Avenue & East 18th Street,40.64945,-73.96306,169.1846747,-15.62,-15.37,-14.82
+12,Brooklyn,Flatbush,Bedford Avenue & Glenwood Road,40.63274,-73.95286,169.2103398,-24.27,-23.87,-23.32
+13,Queens,Hollis,Jamaica Avenue & 198th Place,40.71343,-73.76201,87.82060513,-14.64,-14.24,-13.79
+14,Queens,Hollis,109th Avenue & 203rd Street,40.70804,-73.75507,76.54861213,-13.48,-13.08,-12.48
+15,Queens,Hollis,Farmers Boulevard & 99th Avenue,40.70886,-73.76803,161.7719861,-14.88,-14.48,-13.68
+16,Queens,Jackson Heights,30th Avenue & 92nd Street,40.76162,-73.87699,169.7114189,-22.29,-21.89,-21.29
+17,Queens,Jackson Heights,82nd Street & 37th Avenue,40.74949,-73.88427,169.9502834,-12.62,-12.17,-11.67
+18,Queens,Jackson Heights,31st Avenue & 72nd Street,40.75822,-73.89554,84.04720844,-24.12,-23.97,-23.47
+19,Bronx,Hunts Point,Bronx Charter School for the Arts,40.82167,-73.88671,321.8266733,-20.58,-20.08,-19.58
+20,Bronx,Hunts Point,Randall Avenue & Tiffany Street,40.81157,-73.89016,81.3098383,-25.12,-24.62,-23.82
+21,Bronx,Hunts Point,Hunts Point Avenue & Halleck Street,40.80969,-73.88082,313.7617207,-25.56,-25.06,-24.61
+22,Bronx,Mott Haven,Grand Concourse & East 149th Street,40.81827,-73.92747,23.95520234,-17.34,-16.84,-16.49
+23,Bronx,Mott Haven,Alexander Avenue & East 137th Street,40.80938,-73.92561,37.07975975,-23.32,-23.07,-22.47
+24,Bronx,Mott Haven,East 142nd Street & Jackson Avenue,40.80818,-73.91155,106.6452903,-20.57,-20.32,-19.67
+25,Bronx,Castle Hill,Castle Hill Avenue & Barrett Avenue,40.81258,-73.84649,346.8969394,-27.44,-27.19,-26.59
+26,Bronx,Castle Hill,Randall Avenue & Olmstead Avenue,40.81881,-73.84954,82.50497492,-19.62,-19.37,-19.07
+27,Bronx,Castle Hill,Castle Hill Avenue & Bruckner Boulevard,40.82656,-73.84979,346.9485707,-19.96,-19.66,-18.96
+28,Staten Island,North Shore,Cedar Street & Broad Street,40.6243,-74.08056,252.3320627,-25.28,-24.93,-24.08
+29,Staten Island,North Shore,Broadway & Henderson Avenue,40.63667,-74.11755,175.6944121,-23.76,-23.01,-22.46
+30,Staten Island,North Shore,Harbor Road & Richmond Terrace,40.63529,-74.16026,182.520187,-21.44,-21.19,-20.64

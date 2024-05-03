@@ -170,8 +170,11 @@ def goToLatLng(lat, lng):
     """, False)
 
 if __name__ == '__main__':
-    # Get the path to the CSV file from the command line argument
-    csv_path = sys.argv[1]
+# Get the path to the CSV file from the command line argument
+    if len(sys.argv) > 1:
+        csv_path = sys.argv[1]
+    else:
+        csv_path = "site_selection.csv"
 
     # Read the CSV file into a DataFrame
     sites_df = pd.read_csv(csv_path)
