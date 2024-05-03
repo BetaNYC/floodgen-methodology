@@ -1,4 +1,4 @@
-# FloodGen Methodology with Cyclomedia Integration
+# FloodGen Image Generation Methodology
 
 ## Overview
 This repository is a fork of the original Climategan project with enhancements aimed at revolutionizing flood preparedness advocacy. Leveraging Generative AI, this project generates photorealistic images depicting predicted flooding in urban landscapes. By visualizing potential flood consequences in a compelling manner, it seeks to bridge the psychological gap between current flood maps and public understanding, empowering stakeholders and policymakers to take informed action.
