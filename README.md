@@ -33,8 +33,6 @@ To utilize this framework and generate flood imagery, follow these steps:
    ./process_views.sh
    ```
 
-**Note:** For detailed instructions and additional information, please refer to the documentation provided in the repository.
-
 ## Contributions
 Contributions to this project, including bug fixes, enhancements, and additional features, are welcome. Please refer to the contribution guidelines for more information.
 
