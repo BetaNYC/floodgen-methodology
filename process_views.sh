@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the parent directory containing the "views" directory
-PARENT_DIR="/notebooks"
+PARENT_DIR="/floodgen-methodology"
 
 # Define the output and temporary directories
 FLOOD_IMAGE_DIR="${PARENT_DIR}/flood_image"
