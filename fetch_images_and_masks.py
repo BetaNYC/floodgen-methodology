@@ -5,6 +5,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 
+
 from pathlib import Path
 import os
 import time
@@ -187,6 +188,7 @@ if __name__ == '__main__':
     #save any files in to the temp folder
     TEMP_FOLDER = Path('./temp')
     os.makedirs(TEMP_FOLDER, exist_ok=True)
+
     prefs = {
         'download.default_directory' : str(TEMP_FOLDER.resolve()),
         'download.prompt_for_download': False,
@@ -199,7 +201,6 @@ if __name__ == '__main__':
 
     service = ChromeService(executable_path=ChromeDriverManager(latest_release_url='https://chromedriver.storage.googleapis.com/LATEST_RELEASE').install())
     #service = ChromeService(ChromeDriverManager().install())
-
 
     # if you get ValueError: There is no such driver by url, you need to update chrome
 
